@@ -155,7 +155,7 @@ func login(w http.ResponseWriter, r *http.Request){
 			return
 		}
 	}
-	fmt.Println("Login Success2")
+	fmt.Println("Login Success6")
 
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
