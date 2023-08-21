@@ -122,7 +122,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				http.Redirect(w, r, "/home", http.StatusSeeOther)
 				return
 			}
 		}
@@ -155,7 +155,7 @@ func login(w http.ResponseWriter, r *http.Request){
 			return
 		}
 	}
-	fmt.Println("Login Success6")
+	fmt.Println("Login Success")
 
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
@@ -165,7 +165,7 @@ func login(w http.ResponseWriter, r *http.Request){
 func home(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 	}
 
 	var data = map[string]string{
@@ -182,12 +182,12 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func logout(w http.ResponseWriter, r *http.Request) {
-	session := sessions.Start(w, r)
-	session.Clear()
-	sessions.Destroy(w, r)
-	http.Redirect(w, r, "/", http.StatusFound)
-}
+// func logout(w http.ResponseWriter, r *http.Request) {
+// 	session := sessions.Start(w, r)
+// 	session.Clear()
+// 	sessions.Destroy(w, r)
+// 	http.Redirect(w, r, "/", http.StatusFound)
+// }
 
 
 func main() {
