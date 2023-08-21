@@ -178,7 +178,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	t.Execute(w, data)
-	
+	//return
 
 }
 
