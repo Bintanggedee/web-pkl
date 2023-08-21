@@ -151,7 +151,7 @@ func login(w http.ResponseWriter, r *http.Request){
 		if err != nil {
 			session := sessions.Start(w, r)
 			session.Set("username", users.Username)
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+			http.Redirect(w, r, "/home", http.StatusSeeOther)
 			return
 		}
 	}
@@ -186,7 +186,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 // 	session := sessions.Start(w, r)
 // 	session.Clear()
 // 	sessions.Destroy(w, r)
-// 	http.Redirect(w, r, "/", http.StatusFound)
+// 	http.Redirect(w, r, "/home", http.StatusFound)
 // }
 
 
