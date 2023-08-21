@@ -93,7 +93,7 @@ func checkErr(w http.ResponseWriter, r *http.Request, err error) bool {
 
 func register(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		http.ServeFile(w, r, "views/register.html")
+		http.ServeFile(w, r, "register.html")
 		return
 	}
 
@@ -168,7 +168,7 @@ func login(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	if r.Method != "POST" {
-		http.ServeFile(w, r, "views/login.html")
+		http.ServeFile(w, r, "login.html")
 		return
 	}
 	username := r.FormValue("username")
@@ -202,7 +202,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		"username": session.GetString("username"),
 		"message":  "Welcome to the Go !",
 	}
-	var t, err = template.ParseFiles("views/home.html")
+	var t, err = template.ParseFiles("home.html")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -226,6 +226,6 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Server running on port :8080")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Server running on port :8000")
+	http.ListenAndServe(":8000", nil)
 }
