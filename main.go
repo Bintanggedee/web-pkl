@@ -134,7 +134,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request){ 
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) != 0 && checkErr(w, r, err) {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
 	if r.Method != "POST" {
