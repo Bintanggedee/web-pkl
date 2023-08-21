@@ -1,196 +1,328 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Register Page</title>
 
-    <!-- Compiled and minified CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
-    />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Compiled and minified JavaScript #1b2f5c-->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body {overflow: hidden;}>
-    <nav class="navbar navbar-light" style="background-color: #ffffff;">
-      <div class="container">
-          <a class="navbar-brand" href="/home">
-            <img src="https://www.uhamka.ac.id/static/media/UhamaLogo2.d4e8b86c517ad991c800.png" width="auto" height="65px" class="d-inline-block align-top" alt="">
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-          <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav align-items-lg-center ms-auto me-lg-5">
-                  <li class="nav-item">
-                      <a class="nav-link click-scroll" href="/home">Home</a>
-                  </li>
+    <title>Pendaftaran PKL</title>
 
-                  <li class="nav-item">
-                      <a class="nav-link click-scroll" href="/register">Register</a>
-                  </li>
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-                  <li class="nav-item">
-                      <a class="nav-link click-scroll" href="/login">Login</a>
-                  </li>
-          </div>
-      </div>
-  </nav>
-  <hr>
-    <!-- <nav>
-      <div class="nav-wrapper">
-        <a href="#" class="brand-logo">Go</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="/views/home.html">Home</a></li>
-          <li><a href="/views/login.html">Login</a></li>
-        </ul>
-      </div>
-    </nav> -->
-  </br>
-    <h1><center>Pendaftaran PKL</h1></center>
-    <div class="container">
-      <div class="row">
-        <form method="POST" class="col s12">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input
-              name="username"
-              type="text"
-              class="form-control"
-              id="username"
-              aria-describedby="username"
-              placeholder="Enter username"
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              name="password"
-              type="password"
-              class="form-control"
-              id="password"
-              aria-describedby="password"
-              placeholder="Enter password"
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label for="nim">NIM</label>
-            <input
-              name="nim"
-              type="text"
-              class="form-control"
-              id="nim"
-              aria-describedby="nim"
-              placeholder="Enter NIM"
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label for="nama">Nama</label>
-            <input
-              name="nama"
-              type="text"
-              class="form-control"
-              id="nama"
-              aria-describedby="nama"
-              placeholder="Enter Name"
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label for="asal_instansi">Asal Instansi</label>
-            <input
-              name="asal_instansi"
-              type="text"
-              class="form-control"
-              id="asal_instansi"
-              aria-describedby="asal_instansi"
-              placeholder="Enter Institute"
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label for="mulai_pkl">Mulai PKL</label>
-            <input
-              name="mulai_pkl"
-              type="date"
-              class="form-control"
-              id="mulai_pkl"
-              aria-describedby="mulai_pkl"
-              placeholder="Enter Date"
-            />
-          </div>
-          <br />
-          <div class="form-group">
-            <label for="selesai_pkl">Selesai PKL</label>
-            <input
-              name="selesai_pkl"
-              type="date"
-              class="form-control"
-              id="selesai_pkl"
-              aria-describedby="selesai_pkl"
-              placeholder="Enter Date"
-            />
-          </div>
-          <br />
-          <div class="input-field col s12">
-            <label for="upload_file" class="form-label">Surat </label>
-            <input
-              name="upload_file"
-              id="upload_file"
-              type="file"
-              class="form-control"
-              for="upload_file"
-            />
-          </div>
-          <div class="form-group d-none">
-            <label for="role">Role</label>
-            <input
-              name="role"
-              type="text"
-              class="form-control"
-              id="role"
-              aria-describedby="role"
-              placeholder="Enter Role"
-              value="2"
-            />
-          </div>
-          <br />
-          <div class="form-group d-none">
-            <label for="status">Status</label>
-            <input
-              name="status"
-              type="text"
-              class="form-control"
-              id="status"
-              aria-describedby="status"
-              placeholder="Enter Status"
-              value="0"
-            />
-          </div>
-          <br />
-          <div class="row">
-            <div class="col text-center">
-              <button type="submit" class="btn btn-secondary">Register</button>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;400;700&display=swap" rel="stylesheet">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="css/templatemo-festava-live.css" rel="stylesheet">
+    <!--
+
+TemplateMo 583 Festava Live
+
+https://templatemo.com/tm-583-festava-live
+
+-->
+
+</head>
+
+<body>
+
+    <main>
+
+        <header class="site-header">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-12 col-12 d-flex flex-wrap">
+                        <p class="d-flex me-4 mb-0">
+                            <i class="bi-person custom-icon me-2"></i>
+                            <strong class="text-dark">Selamat datang</strong>
+                        </p>
+                    </div>
+
+                </div>
             </div>
-          </div>
-          <br>
-        </form>
-      </div>
-    </div>
-  </body>
+        </header>
+
+
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="/home">
+                    <img src="https://www.uhamka.ac.id/static/media/UhamaLogo2.d4e8b86c517ad991c800.png" width="auto" height="65px" class="d-inline-block align-top" alt="">
+                 
+                </a>
+
+    
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav align-items-lg-center ms-auto me-lg-5">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="home.html">Halaman Utama</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="home.html#section_2">Tentang</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="home.html#section_3">Jadwal</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="home.html#section_4">Login</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="home.html#section_5">Kontak</a>
+                        </li>
+                    </ul>
+
+                
+                </div>
+            </div>
+        </nav>
+
+
+        <section class="ticket-section section-padding">
+            <div class="section-overlay"></div>
+
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-6 col-10 mx-auto">
+                        <form class="custom-form ticket-form mb-5 mb-lg-0" action="#" method="post" role="form">
+                            <h2 class="text-center mb-4">Daftar</h2>
+
+                            <div class="ticket-form-body">
+                                
+                                <input type="text" class="form-control" name="nim"
+                                    placeholder="NIM" required>
+                                    <!-- placeholder="Ph 085-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required=""> -->
+                                
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="username" id="username"
+                                            class="form-control" placeholder="Username" required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+                                            required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="name" id="nama" class="form-control" placeholder="Nama"
+                                            required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="asal_instansi" id="asal_instansi" class="form-control" placeholder="Asal Instansi"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <label class="form-label" for="upload_file">Upload Surat</label>
+                                <input type="file" class="form-control" id="upload_file" />
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <label for="mulai_pkl">Mulai PKL</label>
+                                        <input type="date" name="mulai_pkl" id="mulai_pkl"
+                                            class="form-control" placeholder="Mulai PKL" required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <label for="selesai_pkl">Selesai PKL</label>
+                                        <input type="date" name="selesai_pkl" id="selesai_pkl" class="form-control" placeholder="Selesai PKL"
+                                            required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="role" id="role"
+                                            class="form-control" placeholder="Role" required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <input type="text" name="status" id="status" class="form-control" placeholder=" Status"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-10 col-8 mx-auto">
+                                    <button type="submit" class="form-control">Submit
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </section>
+    </main>
+
+
+    <footer class="site-footer">
+        <div class="site-footer-top">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-6 col-12">
+                        <h2 class="text-white mb-lg-0">Festava Live</h2>
+                    </div>
+
+                    <div class="col-lg-6 col-12 d-flex justify-content-lg-end align-items-center">
+                        <ul class="social-icon d-flex justify-content-lg-end">
+                            <li class="social-icon-item">
+                                <a href="#" class="social-icon-link">
+                                    <span class="bi-twitter"></span>
+                                </a>
+                            </li>
+
+                            <li class="social-icon-item">
+                                <a href="#" class="social-icon-link">
+                                    <span class="bi-apple"></span>
+                                </a>
+                            </li>
+
+                            <li class="social-icon-item">
+                                <a href="#" class="social-icon-link">
+                                    <span class="bi-instagram"></span>
+                                </a>
+                            </li>
+
+                            <li class="social-icon-item">
+                                <a href="#" class="social-icon-link">
+                                    <span class="bi-youtube"></span>
+                                </a>
+                            </li>
+
+                            <li class="social-icon-item">
+                                <a href="#" class="social-icon-link">
+                                    <span class="bi-pinterest"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-6 col-12 mb-4 pb-2">
+                    <h5 class="site-footer-title mb-3">Links</h5>
+
+                    <ul class="site-footer-links">
+                        <li class="site-footer-link-item">
+                            <a href="#" class="site-footer-link">Halaman Utama</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="home.html#section_2" class="site-footer-link">Tentang</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="home.html#section_3" class="site-footer-link">Jadwal</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="home.html#section_4" class="site-footer-link">Login</a>
+                        </li>
+
+                        <li class="site-footer-link-item">
+                            <a href="home.html#section_5" class="site-footer-link">Kontak</a>
+                        </li>
+
+            
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
+                    <h5 class="site-footer-title mb-3">Have a question?</h5>
+
+                    <p class="text-white d-flex mb-1">
+                        <a href="tel: 090-080-0760" class="site-footer-link">
+                            090-080-0760
+                        </a>
+                    </p>
+
+                    <p class="text-white d-flex">
+                        <a href="mailto:hello@company.com" class="site-footer-link">
+                            hello@company.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-11 mb-4 mb-lg-0 mb-md-0">
+                    <h5 class="site-footer-title mb-3">Location</h5>
+
+                    <p class="text-white d-flex mt-3 mb-2">
+                        Silang Junction South, Tagaytay, Cavite, Philippines</p>
+
+                    <a class="link-fx-1 color-contrast-higher mt-3" href="#">
+                        <span>Our Maps</span>
+                        <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="16" cy="16" r="15.5"></circle>
+                                <line x1="10" y1="18" x2="16" y2="12"></line>
+                                <line x1="16" y1="12" x2="22" y2="18"></line>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-footer-bottom">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-3 col-12 mt-5">
+                        <p class="copyright-text">Copyright © 2036 Festava Live Company</p>
+                        <p class="copyright-text">Distributed by: <a href="https://themewagon.com">ThemeWagon</a></p>
+                    </div>
+
+                    <div class="col-lg-8 col-12 mt-lg-5">
+                        <ul class="site-footer-links">
+                            <li class="site-footer-link-item">
+                                <a href="#" class="site-footer-link">Terms &amp; Conditions</a>
+                            </li>
+
+                            <li class="site-footer-link-item">
+                                <a href="#" class="site-footer-link">Privacy Policy</a>
+                            </li>
+
+                            <li class="site-footer-link-item">
+                                <a href="#" class="site-footer-link">Your Feedback</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--
+
+T e m p l a t e M o
+
+-->
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/custom.js"></script>
+
+</body>
+
 </html>
