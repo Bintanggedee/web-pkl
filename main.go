@@ -58,17 +58,6 @@ func routes() {
 // 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 // }
 
-func main() {
-	//connectServer()
-	connect_db()
-	routes()
-
-	defer db.Close()
-
-	fmt.Println("Server running on port :8000")
-	http.ListenAndServe(":8000", nil)
-}
-
 func QueryUser(username string) user {
 	var users = user{}
 	err = db.QueryRow(`
@@ -260,3 +249,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 // 	sessions.Destroy(w, r)
 // 	http.Redirect(w, r, "/home", http.StatusFound)
 // }
+
+func main() {
+	//connectServer()
+	connect_db()
+	routes()
+
+	defer db.Close()
+
+	fmt.Println("Server running on port :8000")
+	http.ListenAndServe(":8000", nil)
+}
