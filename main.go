@@ -50,6 +50,15 @@ func routes() {
 	http.HandleFunc("/home", home)
 }
 
+func main() {
+	connect_db()
+	routes()
+
+	defer db.Close()
+
+	fmt.Println("Server running on port :8000")
+	http.ListenAndServe(":8000", nil)
+}
 
 func QueryUser(username string) user {
 	var users = user{}
@@ -220,12 +229,3 @@ func home(w http.ResponseWriter, r *http.Request) {
 // }
 
 
-func main() {
-	connect_db()
-	routes()
-
-	defer db.Close()
-
-	fmt.Println("Server running on port :8000")
-	http.ListenAndServe(":8000", nil)
-}
