@@ -45,9 +45,19 @@ func connect_db() {
 }
 
 func routes() {
-	http.HandleFunc("/register", register)
+	http.HandleFunc("/registerr", register)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
+}
+
+func main() {
+	connect_db()
+	routes()
+
+	defer db.Close()
+
+	fmt.Println("Server running on port :8000")
+	http.ListenAndServe(":8000", nil)
 }
 
 
@@ -131,35 +141,6 @@ func register(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func login(w http.ResponseWriter, r *http.Request) {
-// 	session := sessions.Start(w, r)
-// 	if len(session.GetString("username")) != 0 && checkErr(w, r, err) {
-// 		http.Redirect(w, r, "/home", http.StatusFound)
-// 	}
-// 	if r.Method != "POST" {
-// 		http.ServeFile(w, r, "views/login.html")
-// 		return
-// 	}
-// 	username := r.FormValue("username")
-// 	password := r.FormValue("password")
-
-// 	users := QueryUser(username)
-
-// 	//deskripsi dan compare password
-// 	var password_tes = bcrypt.CompareHashAndPassword([]byte(users.Password), []byte(password))
-
-// 	if password_tes == nil {
-// 		//login success
-// 		session := sessions.Start(w, r)
-// 		session.Set("username", users.Username)
-// 		session.Set("password", users.Password)
-// 		http.Redirect(w, r, "/home", http.StatusFound)
-// 	} else {
-// 		//login failed
-// 		http.Redirect(w, r, "/login", http.StatusFound)
-// 	}
-
-// }
 
 func login(w http.ResponseWriter, r *http.Request){ 
 	session := sessions.Start(w, r)
@@ -190,27 +171,80 @@ func login(w http.ResponseWriter, r *http.Request){
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
 
+// func home(w http.ResponseWriter, r *http.Request) {
+// 	session := sessions.Start(w, r)
+// 	if len(session.GetString("username")) == 0 {
+// 		http.Redirect(w, r, "/home", http.StatusMovedPermanently)
+// 	}
 
+// 	var data = map[string]string{
+// 		"username": session.GetString("username"),
+// 		"message":  "Welcome to the Go !",
+// 	}
+// 	var t, err = template.ParseFiles("home.html")
+// 	if err != nil {
+// 		fmt.Println(err.Error())
+// 		return
+// 	}
+// 	t.Execute(w, data)
+// 	//return
+
+// }
 
 func home(w http.ResponseWriter, r *http.Request) {
+	// Check if the user is authenticated
 	session := sessions.Start(w, r)
-	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "/home", http.StatusMovedPermanently)
-	}
-
-	var data = map[string]string{
-		"username": session.GetString("username"),
-		"message":  "Welcome to the Go !",
-	}
-	var t, err = template.ParseFiles("home.html")
-	if err != nil {
-		fmt.Println(err.Error())
+	username := session.GetString("username")
+	if len(username) == 0 {
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
-	t.Execute(w, data)
-	//return
 
+	// Get user information from the database
+	users := QueryUser(username)
+	if (user{}) == users {
+		http.Error(w, "User not found", http.StatusInternalServerError)
+		return
+	}
+
+	// Define the data to be passed to the template
+	data := struct {
+		Username     string
+		Nim          string
+		Nama         string
+		AsalInstansi string
+		MulaiPkl     time.Time
+		SelesaiPkl   time.Time
+		UploadFile   string
+		Role         int
+		Status       int
+	}{
+		Username:     users.Username,
+		Nim:          users.Nim,
+		Nama:         users.Nama,
+		AsalInstansi: users.AsalInstansi,
+		MulaiPkl:     users.MulaiPkl,
+		SelesaiPkl:   users.SelesaiPkl,
+		UploadFile:   users.UploadFile,
+		Role:         users.Role,
+		Status:       users.Status,
+	}
+
+	// Load and parse the template
+	tmpl, err := template.ParseFiles("home.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Execute the template with the data
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
+
 
 // func logout(w http.ResponseWriter, r *http.Request) {
 // 	session := sessions.Start(w, r)
@@ -218,14 +252,3 @@ func home(w http.ResponseWriter, r *http.Request) {
 // 	sessions.Destroy(w, r)
 // 	http.Redirect(w, r, "/home", http.StatusFound)
 // }
-
-
-func main() {
-	connect_db()
-	routes()
-
-	defer db.Close()
-
-	fmt.Println("Server running on port :8000")
-	http.ListenAndServe(":8000", nil)
-}
