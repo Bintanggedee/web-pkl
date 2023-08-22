@@ -50,7 +50,16 @@ func routes() {
 	http.HandleFunc("/home", home)
 }
 
+// func connectServer(){
+// 	directory := http.Dir("./resources")
+// 	fileServer := http.FileServer(directory)
+
+// 	mux := http.NewServeMux()
+// 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+// }
+
 func main() {
+	//connectServer()
 	connect_db()
 	routes()
 
@@ -59,7 +68,6 @@ func main() {
 	fmt.Println("Server running on port :8000")
 	http.ListenAndServe(":8000", nil)
 }
-
 
 func QueryUser(username string) user {
 	var users = user{}
