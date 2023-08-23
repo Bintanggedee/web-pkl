@@ -169,6 +169,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 }
 
+
+
 func home(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) == 0 {
@@ -185,7 +187,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	t.Execute(w, data)
-	return
 
 }
 
@@ -200,6 +201,9 @@ func main() {
 	//connectServer()
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
+	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("fonts"))))
+	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
+	http.Handle("/video/", http.StripPrefix("/video/", http.FileServer(http.Dir("video"))))
 	connect_db()
 	routes()
 
