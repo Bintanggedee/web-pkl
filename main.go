@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"text/template"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -45,7 +44,7 @@ func connect_db() {
 }
 
 func routes() {
-	http.HandleFunc("/registerr", register)
+	http.HandleFunc("/register", register)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/logout", logout)
@@ -169,26 +168,32 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
-
 func home(w http.ResponseWriter, r *http.Request) {
-	session := sessions.Start(w, r)
-	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
-	}
-
-	var data = map[string]string{
-		"username": session.GetString("username"),
-		"message":  "Welcome to the Go !",
-	}
-	var t, err = template.ParseFiles("home.html")
-	if err != nil {
-		fmt.Println(err.Error())
+	if r.Method != "POST" {
+		http.ServeFile(w, r, "home.html")
 		return
 	}
-	t.Execute(w, data)
-
 }
+// func home(w http.ResponseWriter, r *http.Request) {
+// 	session := sessions.Start(w, r)
+// 	if len(session.GetString("username")) == 0 {
+// 		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+// 	}
+
+// 	var data = map[string]string{
+// 		"username": session.GetString("username"),
+// 		"message":  "Welcome to the Go !",
+// 	}
+// 	var t, err = template.ParseFiles("home.html")
+// 	if err != nil {
+// 		fmt.Println(err.Error())
+// 		return
+// 	}
+// 	t.Execute(w, data)
+
+// }
+
+
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
@@ -209,6 +214,6 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Server running on port :8000")
-	http.ListenAndServe(":8000", nil)
+	fmt.Println("Server running on port :7070")
+	http.ListenAndServe(":7070", nil)
 }
