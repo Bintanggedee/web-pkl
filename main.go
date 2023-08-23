@@ -48,6 +48,7 @@ func routes() {
 	http.HandleFunc("/registerr", register)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
+	http.HandleFunc("/logout", logout)
 }
 
 // func connectServer(){
@@ -129,7 +130,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				http.Redirect(w, r, "/home", http.StatusSeeOther)
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
 				return
 			}
 		}
@@ -138,12 +139,10 @@ func register(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-func login(w http.ResponseWriter, r *http.Request){ 
+func login(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) != 0 && checkErr(w, r, err) {
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
-		return
+		http.Redirect(w, r, "/home", http.StatusFound)
 	}
 	if r.Method != "POST" {
 		http.ServeFile(w, r, "login.html")
@@ -154,104 +153,53 @@ func login(w http.ResponseWriter, r *http.Request){
 
 	users := QueryUser(username)
 
-	if (user{}) != users {
-		err := bcrypt.CompareHashAndPassword([]byte(users.Password), []byte(password))
-		if err != nil {
-			session := sessions.Start(w, r)
-			session.Set("username", users.Username)
-			http.Redirect(w, r, "/home", http.StatusSeeOther)
-			return
-		}
+	//deskripsi dan compare password
+	var password_tes = bcrypt.CompareHashAndPassword([]byte(users.Password), []byte(password))
+
+	if password_tes == nil {
+		//login success
+		session := sessions.Start(w, r)
+		session.Set("username", users.Username)
+		session.Set("password", users.Password)
+		http.Redirect(w, r, "/home", http.StatusFound)
+	} else {
+		//login failed
+		http.Redirect(w, r, "/login", http.StatusFound)
 	}
-	fmt.Println("Login Success")
 
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
-
-// func home(w http.ResponseWriter, r *http.Request) {
-// 	session := sessions.Start(w, r)
-// 	if len(session.GetString("username")) == 0 {
-// 		http.Redirect(w, r, "/home", http.StatusMovedPermanently)
-// 	}
-
-// 	var data = map[string]string{
-// 		"username": session.GetString("username"),
-// 		"message":  "Welcome to the Go !",
-// 	}
-// 	var t, err = template.ParseFiles("home.html")
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return
-// 	}
-// 	t.Execute(w, data)
-// 	//return
-
-// }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	// Check if the user is authenticated
 	session := sessions.Start(w, r)
-	username := session.GetString("username")
-	if len(username) == 0 {
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
-		return
+	if len(session.GetString("username")) == 0 {
+		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 	}
 
-	// Get user information from the database
-	users := QueryUser(username)
-	if (user{}) == users {
-		http.Error(w, "User not found", http.StatusInternalServerError)
-		return
+	var data = map[string]string{
+		"username": session.GetString("username"),
+		"message":  "Welcome to the Go !",
 	}
-
-	// Define the data to be passed to the template
-	data := struct {
-		Username     string
-		Nim          string
-		Nama         string
-		AsalInstansi string
-		MulaiPkl     time.Time
-		SelesaiPkl   time.Time
-		UploadFile   string
-		Role         int
-		Status       int
-	}{
-		Username:     users.Username,
-		Nim:          users.Nim,
-		Nama:         users.Nama,
-		AsalInstansi: users.AsalInstansi,
-		MulaiPkl:     users.MulaiPkl,
-		SelesaiPkl:   users.SelesaiPkl,
-		UploadFile:   users.UploadFile,
-		Role:         users.Role,
-		Status:       users.Status,
-	}
-
-	// Load and parse the template
-	tmpl, err := template.ParseFiles("home.html")
+	var t, err = template.ParseFiles("home.html")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		fmt.Println(err.Error())
 		return
 	}
+	t.Execute(w, data)
+	return
 
-	// Execute the template with the data
-	err = tmpl.Execute(w, data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 }
 
-
-// func logout(w http.ResponseWriter, r *http.Request) {
-// 	session := sessions.Start(w, r)
-// 	session.Clear()
-// 	sessions.Destroy(w, r)
-// 	http.Redirect(w, r, "/home", http.StatusFound)
-// }
+func logout(w http.ResponseWriter, r *http.Request) {
+	session := sessions.Start(w, r)
+	session.Clear()
+	sessions.Destroy(w, r)
+	http.Redirect(w, r, "/home", http.StatusFound)
+}
 
 func main() {
 	//connectServer()
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 	connect_db()
 	routes()
 
