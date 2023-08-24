@@ -48,6 +48,7 @@ func routes() {
 	http.HandleFunc("/register", register)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
+	http.HandleFunc("admin/homeAdmin", homeAdmin)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/about", about)
 }
@@ -171,7 +172,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		session := sessions.Start(w, r)
 		session.Set("username", users.Username)
 		session.Set("password", users.Password)
-		http.Redirect(w, r, "/home", http.StatusFound)
+		http.Redirect(w, r, "admin/homeAdmin", http.StatusFound)
 		fmt.Println("Sukses")
 	} else {
 		//login failed
@@ -181,22 +182,29 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func homeAdmin(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "/home", http.StatusMovedPermanently)
+		http.Redirect(w, r, "admin/homeAdmin", http.StatusMovedPermanently)
 	}
 
 	var data = map[string]string{
 		"username": session.GetString("username"),
 		"message":  "Welcome to the Go !",
 	}
-	var t, err = template.ParseFiles("home.html")
+	var t, err = template.ParseFiles("home_admin.html")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 	t.Execute(w, data)
+}
+
+func home(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.ServeFile(w, r, "home.html")
+		return
+	}
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
