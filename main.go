@@ -48,7 +48,7 @@ func routes() {
 	http.HandleFunc("/register", register)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
-	http.HandleFunc("admin/homeAdmin", homeAdmin)
+	http.HandleFunc("/home_admin", home_admin)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/about", about)
 }
@@ -172,7 +172,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		session := sessions.Start(w, r)
 		session.Set("username", users.Username)
 		session.Set("password", users.Password)
-		http.Redirect(w, r, "admin/homeAdmin", http.StatusFound)
+		http.Redirect(w, r, "/home_admin", http.StatusFound)
 		fmt.Println("Sukses")
 	} else {
 		//login failed
@@ -182,10 +182,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func homeAdmin(w http.ResponseWriter, r *http.Request) {
+func home_admin(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "admin/homeAdmin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/home_admin", http.StatusMovedPermanently)
 	}
 
 	var data = map[string]string{
