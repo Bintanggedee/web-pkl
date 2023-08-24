@@ -48,6 +48,7 @@ func routes() {
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/about", about)
 }
 
 // func connectServer(){
@@ -138,10 +139,17 @@ func register(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func about(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.ServeFile(w, r, "about.html")
+		return
+	}
+}
+
 func login(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) != 0 && checkErr(w, r, err) {
-		http.Redirect(w, r, "/home", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 	}
 	if r.Method != "POST" {
 		http.ServeFile(w, r, "login.html")
@@ -168,32 +176,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 }
 
+
+
 func home(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.ServeFile(w, r, "home.html")
 		return
 	}
 }
-// func home(w http.ResponseWriter, r *http.Request) {
-// 	session := sessions.Start(w, r)
-// 	if len(session.GetString("username")) == 0 {
-// 		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
-// 	}
-
-// 	var data = map[string]string{
-// 		"username": session.GetString("username"),
-// 		"message":  "Welcome to the Go !",
-// 	}
-// 	var t, err = template.ParseFiles("home.html")
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return
-// 	}
-// 	t.Execute(w, data)
-
-// }
-
-
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
@@ -214,6 +204,6 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Server running on port :7070")
-	http.ListenAndServe(":7070", nil)
+	fmt.Println("Server running on port :7010")
+	http.ListenAndServe(":7010", nil)
 }
