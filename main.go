@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
@@ -157,6 +158,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	username := r.FormValue("username")
 	password := r.FormValue("password")
+	fmt.Println(username)
+	fmt.Println(password)
 
 	users := QueryUser(username)
 
@@ -169,20 +172,31 @@ func login(w http.ResponseWriter, r *http.Request) {
 		session.Set("username", users.Username)
 		session.Set("password", users.Password)
 		http.Redirect(w, r, "/home", http.StatusFound)
+		fmt.Println("Sukses")
 	} else {
 		//login failed
+		fmt.Println("Gagal")
+		fmt.Fprint(w, "Gagal")
 		http.Redirect(w, r, "/login", http.StatusFound)
 	}
-
 }
 
-
-
 func home(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.ServeFile(w, r, "home.html")
+	session := sessions.Start(w, r)
+	if len(session.GetString("username")) == 0 {
+		http.Redirect(w, r, "/home", http.StatusMovedPermanently)
+	}
+
+	var data = map[string]string{
+		"username": session.GetString("username"),
+		"message":  "Welcome to the Go !",
+	}
+	var t, err = template.ParseFiles("home.html")
+	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
+	t.Execute(w, data)
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
@@ -204,6 +218,6 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Server running on port :7010")
-	http.ListenAndServe(":7010", nil)
+	fmt.Println("Server running on port :2003")
+	http.ListenAndServe(":2003", nil)
 }

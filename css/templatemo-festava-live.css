@@ -498,10 +498,10 @@ strong {
   ABOUT              
 -----------------------------------------*/
 .about-section {
-  background-image: url("../images/.jpg");
-  background-color: #704010;
+  background-image: url("../images/uhamka-black-1.jpg");
+  background-color: #102a70;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 2031px 1359px;
   position: relative;
 }
 
@@ -715,12 +715,20 @@ strong {
 .google-map {
   border-radius: var(--border-radius-medium);
 }
+.contact-section {
+  background-image: url("../images/uhamka-black-2.jpg");
+  background-color: #102a70;
+  background-repeat: no-repeat;
+  background-size: 678px 452px;
+  position: relative;
+}
 
 /*---------------------------------------
   CUSTOM FORM               
 -----------------------------------------*/
+
 .custom-form .form-control {
-  color: var(#717275);
+  color: var(#1a2544);
   margin-bottom: 24px;
   padding-top: 13px;
   padding-bottom: 13px;
