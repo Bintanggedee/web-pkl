@@ -50,7 +50,6 @@ func routes() {
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/home_admin", home_admin)
 	http.HandleFunc("/logout", logout)
-	http.HandleFunc("/about", about)
 }
 
 // func connectServer(){
@@ -138,13 +137,6 @@ func register(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		http.Redirect(w, r, "/register", http.StatusSeeOther)
-	}
-}
-
-func about(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.ServeFile(w, r, "about.html")
-		return
 	}
 }
 
