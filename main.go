@@ -48,7 +48,7 @@ func routes() {
 	http.HandleFunc("/register", register)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/home", home)
-	http.HandleFunc("/home_admin", home_admin)
+	http.HandleFunc("/home_user", home_user)
 	http.HandleFunc("/logout", logout)
 }
 
@@ -164,7 +164,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		session := sessions.Start(w, r)
 		session.Set("username", users.Username)
 		session.Set("password", users.Password)
-		http.Redirect(w, r, "/home_admin", http.StatusFound)
+		http.Redirect(w, r, "/home_user", http.StatusFound)
 		fmt.Println("Sukses")
 	} else {
 		//login failed
@@ -174,17 +174,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func home_admin(w http.ResponseWriter, r *http.Request) {
+func home_user(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "/home_admin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/home_user", http.StatusMovedPermanently)
 	}
 
 	var data = map[string]string{
 		"username": session.GetString("username"),
-		"message":  "Welcome to the Go !",
 	}
-	var t, err = template.ParseFiles("home_admin.html")
+	var t, err = template.ParseFiles("home_user.html")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -218,6 +217,6 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Server running on port :2003")
-	http.ListenAndServe(":2003", nil)
+	fmt.Println("Server running on port :2004")
+	http.ListenAndServe(":2004", nil)
 }
