@@ -51,15 +51,8 @@ func routes() {
 	http.HandleFunc("/home_user", home_user)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/profile", profile)
+	http.HandleFunc("/home_admin", home_admin)
 }
-
-// func connectServer(){
-// 	directory := http.Dir("./resources")
-// 	fileServer := http.FileServer(directory)
-
-// 	mux := http.NewServeMux()
-// 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-// }
 
 func QueryUser(username string) user {
 	var users = user{}
@@ -185,6 +178,23 @@ func home_user(w http.ResponseWriter, r *http.Request) {
 		"username": session.GetString("username"),
 	}
 	var t, err = template.ParseFiles("home_user.html")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	t.Execute(w, data)
+}
+
+func home_admin(w http.ResponseWriter, r *http.Request) {
+	session := sessions.Start(w, r)
+	if len(session.GetString("username")) == 0 {
+		http.Redirect(w, r, "/home_admin", http.StatusMovedPermanently)
+	}
+
+	var data = map[string]string{
+		"username": session.GetString("username"),
+	}
+	var t, err = template.ParseFiles("home_admin.html")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
