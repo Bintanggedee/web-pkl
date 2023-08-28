@@ -50,6 +50,7 @@ func routes() {
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/home_user", home_user)
 	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/profile", profile)
 }
 
 // func connectServer(){
@@ -194,6 +195,13 @@ func home_user(w http.ResponseWriter, r *http.Request) {
 func home(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.ServeFile(w, r, "home.html")
+		return
+	}
+}
+
+func profile(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.ServeFile(w, r, "profile.html")
 		return
 	}
 }
