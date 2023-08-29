@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Profile</title>
+  </head>
+  <body>
+    <h1>Edit Profile</h1>
+    <form action="/save_profile" method="post">
+      <input type="hidden" name="username" value="{{.username}}" />
+      <label for="nim">NIM:</label>
+      <input type="text" id="nim" name="nim" value="{{.nim}}" /><br />
+      <!-- Tambahkan input fields lainnya sesuai dengan data yang ingin diubah -->
+      <input type="submit" value="Save" />
+    </form>
+    <a href="/profile">Back to Profile</a>
+  </body>
+</html>

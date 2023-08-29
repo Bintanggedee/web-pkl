@@ -43,7 +43,7 @@ https://templatemo.com/tm-583-festava-live
                     <div class="col-lg-12 col-12 d-flex flex-wrap">
                         <p class="d-flex me-4 mb-0">
                             <i class="bi-person custom-icon me-2"></i>
-                            <strong class="text-dark">Selamat datang</strong>
+                            <strong class="text-dark">Selamat Datang</strong>
                         </p>
                     </div>
 
@@ -54,7 +54,7 @@ https://templatemo.com/tm-583-festava-live
 
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand" href="/home">
+                <a class="navbar-brand" href="/home_user">
                     <img src="https://www.uhamka.ac.id/static/media/UhamaLogo2.d4e8b86c517ad991c800.png" width="auto" height="65px" class="d-inline-block align-top" alt="">
                  
                 </a>
@@ -106,67 +106,69 @@ https://templatemo.com/tm-583-festava-live
                 <div class="row">
 
                     <div class="col-lg-6 col-10 mx-auto">
-                        <form class="custom-form ticket-form mb-5 mb-lg-0" action="#" method="post" role="form">
+                        <form class="custom-form ticket-form mb-5 mb-lg-0" action="/home_user" method="post" role="form">
                             <h2 class="text-center mb-4">Ubah Data</h2>
 
                             <div class="ticket-form-body">
                                 
-                                <input type="text" class="form-control" name="nim"
-                                    placeholder="NIM" required>
+                                <input type="text" class="form-control" name="nim" value="{{.nim}}" required>
                                     <!-- placeholder="Ph 085-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required=""> -->
                                 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="text" name="username" id="username"
-                                            class="form-control" placeholder="Username" required>
+                                        <input type="text" name="username" value="{{.username}}" id="username"
+                                            class="form-control" required>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="password" name="password" id="password" class="form-control" placeholder="Password"
+                                        <input type="password" name="password" value="{{.password}}" id="password" class="form-control"
                                             required>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama"
+                                        <input type="text" name="nama" value="{{.nama}}" id="nama" class="form-control"
                                             required>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="text" name="asal_instansi" id="asal_instansi" class="form-control" placeholder="Asal Instansi"
+                                        <input type="text" name="asal_instansi" value="{{.asal_instansi}}" id="asal_instansi" class="form-control" 
                                             required>
                                     </div>
                                 </div>
-
-                                <label class="form-label" for="upload_file">Upload Surat</label>
-                                <input type="file" name="upload_file" class="form-control" id="upload_file"/>
+                                <font color="#cebc1b"><strong>File yang diunggah sebelumnya: {{.upload_file}}</strong></font>
+                                <font color="#F0F0F0">
+                                    <label class="form-label" for="upload_file">Upload File Baru</label>
+                                    <input type="file" name="upload_file" class="form-control" id="upload_file"/>
+                                </font>
 
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <label for="mulai_pkl">Mulai PKL</label>
-                                        <input type="date" name="mulai_pkl" id="mulai_pkl"
-                                            class="form-control" placeholder="Mulai PKL" required>
+                                        <font color="#F0F0F0"><label for="mulai_pkl">Mulai PKL</label>
+                                            <input type="text" name="mulai_pkl" value="{{.mulai_pkl.Format "2006-01-02"}}" id="mulai_pkl"
+                                                class="form-control" required></font>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <label for="selesai_pkl">Selesai PKL</label>
-                                        <input type="date" name="selesai_pkl" id="selesai_pkl" class="form-control" placeholder="Selesai PKL"
-                                            required>
+                                        <font color="#F0F0F0"><label for="selesai_pkl">Selesai PKL</label>
+                                            <input type="text" name="selesai_pkl" value="{{.selesai_pkl.Format "2006-01-02"}}" id="selesai_pkl" class="form-control"
+                                                required></font>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="text" name="role" id="role"
-                                            class="form-control" placeholder="Role" required>
+                                        <input type="text" name="role" value="{{.role}}" id="role"
+                                            class="form-control" required>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="text" name="status" id="status" class="form-control" placeholder=" Status"
+                                        <input type="text" name="status" value="{{.status}}" id="status" class="form-control"
                                             required>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-4 col-md-10 col-8 mx-auto">
-                                    <button type="submit" class="form-control">Submit
+                                    <button type="submit" value="Save" class="form-control">Simpan</button>
                             </div>
+                            <a href="/edit_profile">Edit Profile</a>
                         </form>
                     </div>
                 </div>

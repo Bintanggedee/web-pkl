@@ -32,7 +32,7 @@ type user struct {
 }
 
 func connect_db() {
-	db, err = sql.Open("mysql", "root:@tcp(127.0.0.1)/web_pkl")
+	db, err = sql.Open("mysql", "root:@tcp(127.0.0.1)/web_pkl?parseTime=true")
 
 	if err != nil {
 		log.Fatalln(err)
@@ -52,6 +52,8 @@ func routes() {
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/profile", profile)
 	http.HandleFunc("/home_admin", home_admin)
+	http.HandleFunc("/edit_profile", editProfile)
+	http.HandleFunc("/save_profile", saveProfile)
 }
 
 func QueryUser(username string) user {
@@ -209,12 +211,162 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetUserByUsername(username string) (user, error) {
+	var u user
+	err := db.QueryRow("SELECT * FROM users WHERE username = ?", username).
+		Scan(&u.ID, &u.Username, &u.Password, &u.Nim, &u.Nama, &u.AsalInstansi,
+			&u.MulaiPkl, &u.SelesaiPkl, &u.UploadFile, &u.Role, &u.Status)
+	if err != nil {
+		return u, err
+	}
+	return u, nil
+}
+
+
 func profile(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.ServeFile(w, r, "profile.html")
+	session := sessions.Start(w, r)
+	username := session.GetString("username")
+
+	if len(username) == 0 {
+		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
+
+	u, err := GetUserByUsername(username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var data = map[string]interface{}{
+		"username":     u.Username,
+		"nim":          u.Nim,
+		"nama":         u.Nama,
+		"asal_instansi": u.AsalInstansi,
+		"mulai_pkl":    u.MulaiPkl,
+		"selesai_pkl":  u.SelesaiPkl,
+		"upload_file":  u.UploadFile,
+		"role":         u.Role,
+		"status":       u.Status,
+	}
+
+	var t *template.Template
+	t, err = template.ParseFiles("profile.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(w, data)
 }
+
+func editProfile(w http.ResponseWriter, r *http.Request) {
+	session := sessions.Start(w, r)
+	username := session.GetString("username")
+
+	if len(username) == 0 {
+		http.Redirect(w, r, "/profile", http.StatusFound)
+		return
+	}
+
+	u, err := GetUserByUsername(username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var data = map[string]interface{}{
+		"username":     u.Username,
+		"nim":          u.Nim,
+		"nama":         u.Nama,
+		"asal_instansi": u.AsalInstansi,
+		"mulai_pkl":    u.MulaiPkl,
+		"selesai_pkl":  u.SelesaiPkl,
+		"upload_file":  u.UploadFile,
+		"role":         u.Role,
+		"status":       u.Status,
+	}
+
+	var t *template.Template
+	t, err = template.ParseFiles("edit_profile.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(w, data)
+}
+
+func saveProfile(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Redirect(w, r, "/edit_profile", http.StatusFound)
+		return
+	}
+
+	session := sessions.Start(w, r)
+	username := session.GetString("username")
+
+	if len(username) == 0 {
+		http.Redirect(w, r, "/home_user", http.StatusFound)
+		return
+	}
+	Nim := r.FormValue("nim")
+	Nama := r.FormValue("nama")
+	AsalInstansi := r.FormValue("asal_instansi")
+	MulaiPkl := r.FormValue("mulai_pkl")
+	SelesaiPkl := r.FormValue("selesai_pkl")
+	UploadFile := r.FormValue("upload_file")
+	Role := r.FormValue("role")
+	Status := r.FormValue("status")
+
+	
+	layout := "2006-01-02"
+	mulaiPkl, err := time.Parse(layout, MulaiPkl)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	selesaiPkl, err := time.Parse(layout, SelesaiPkl)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+		result, err := db.Exec(`
+		UPDATE users
+		SET nim=?, 
+		nama=?, 
+		asal_instansi=?, 
+		mulai_pkl=?, 
+		selesai_pkl=?, 
+		upload_file=?, 
+		role=?, 
+		status=?
+		WHERE username=?
+	`,
+	Nim, 
+	Nama, 
+	AsalInstansi, 
+	mulaiPkl, 
+	selesaiPkl, 
+	UploadFile, 
+	Role, 
+	Status, 
+	username,
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+affectedRows, _ := result.RowsAffected()
+if affectedRows == 0 {
+	http.Error(w, "No rows were updated", http.StatusInternalServerError)
+	return
+}
+	http.Redirect(w, r, "/profile", http.StatusSeeOther)
+}
+
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
