@@ -107,7 +107,7 @@ https://templatemo.com/tm-583-festava-live
 
                     <div class="col-lg-6 col-10 mx-auto">
                         <form class="custom-form ticket-form mb-5 mb-lg-0" action="/save_profile" method="post" role="form">
-                            <h2 class="text-center mb-4">Ubah Data</h2>
+                            <h2 class="text-center mb-4">Ubah Profil</h2>
 
                             <div class="ticket-form-body">
                                 
@@ -135,9 +135,11 @@ https://templatemo.com/tm-583-festava-live
                                             required>
                                     </div>
                                 </div>
-                                <font color="#cebc1b"><strong>File yang diunggah sebelumnya: {{.upload_file}}</strong></font>
+                                <font color="#cebc1b"><strong>File yang diunggah sebelumnya : {{.upload_file}}</strong>
+                                  <strong>(Unggah file sebelumnya jika tidak ingin mengunggah file baru)</strong>
+                                </font>
                                 <font color="#F0F0F0">
-                                    <label class="form-label" for="upload_file">Upload File Baru</label>
+                                    <label class="form-label" for="upload_file">Unggah File</label>
                                     <input type="file" name="upload_file" class="form-control" id="upload_file"/>
                                 </font>
 
@@ -169,7 +171,7 @@ https://templatemo.com/tm-583-festava-live
                                     <button type="submit" value="Save" class="form-control">Simpan</button>
                             </div>
                             <br>
-                            <a href="/profile">Kembali</a>
+                            <a href="/profile">Kembali ke Profile</a>
                         </form>
                     </div>
                 </div>
@@ -247,7 +249,7 @@ https://templatemo.com/tm-583-festava-live
                         </li>
 
                         <li class="site-footer-link-item">
-                            <a href="/login" class="site-footer-link">Login</a>
+                            <a href="/logout" class="site-footer-link" onclick="return confirm('Apakah anda yakin ingin keluar?')">Logout</a>
                         </li>
 
             

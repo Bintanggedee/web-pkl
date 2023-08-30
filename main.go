@@ -240,6 +240,7 @@ func profile(w http.ResponseWriter, r *http.Request) {
 
 	var data = map[string]interface{}{
 		"username":     u.Username,
+		//"password":     u.Password,
 		"nim":          u.Nim,
 		"nama":         u.Nama,
 		"asal_instansi": u.AsalInstansi,
@@ -361,7 +362,7 @@ func saveProfile(w http.ResponseWriter, r *http.Request) {
 
 affectedRows, _ := result.RowsAffected()
 if affectedRows == 0 {
-	http.Error(w, "No rows were updated", http.StatusInternalServerError)
+	http.Error(w, "Tidak ada perubahan", http.StatusInternalServerError)
 	return
 }
 	http.Redirect(w, r, "/profile", http.StatusSeeOther)

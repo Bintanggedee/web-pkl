@@ -42,7 +42,7 @@ https://templatemo.com/tm-583-festava-live
 
                     <div class="col-lg-12 col-12 d-flex flex-wrap">
                         <p class="d-flex me-4 mb-0">
-                            <i class="bi-person custom-icon me-2"></i>
+                            <!-- <i class="bi-person custom-icon me-2"></i> -->
                             <strong class="text-dark">Selamat Datang</strong>
                         </p>
                     </div>
@@ -135,7 +135,7 @@ https://templatemo.com/tm-583-festava-live
                                             disabled>
                                     </div>
                                 </div>
-                                <font color="#cebc1b"><strong>File yang diunggah sebelumnya: {{.upload_file}}</strong></font>
+                                <font color="#cebc1b"><strong>File yang diunggah sebelumnya : {{.upload_file}}</strong></font>
                                 <!-- <font color="#F0F0F0">
                                     <label class="form-label" for="upload_file">Upload File Baru</label>
                                     <input type="file" name="upload_file" class="form-control" id="upload_file"/>
@@ -168,14 +168,13 @@ https://templatemo.com/tm-583-festava-live
                                 <!-- <div class="col-lg-4 col-md-10 col-8 mx-auto">
                                     <button type="submit" value="Save" class="form-control">Simpan</button>
                             </div> -->
+                            <a href="/home_user">Home</a>
                             <a href="/edit_profile">Edit Profile</a>
                         </form>
                     </div>
                 </div>
         </section>
     </main>
-
-
     <footer class="site-footer">
         <div class="site-footer-top">
             <div class="container">
@@ -246,7 +245,7 @@ https://templatemo.com/tm-583-festava-live
                         </li>
 
                         <li class="site-footer-link-item">
-                            <a href="/login" class="site-footer-link">Login</a>
+                            <a href="/logout" class="site-footer-link" onclick="return confirm('Apakah anda yakin ingin keluar?')">Logout</a>
                         </li>
 
             
