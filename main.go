@@ -51,10 +51,32 @@ func routes() {
 	http.HandleFunc("/home_user", home_user)
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/profile", profile)
+	//http.HandleFunc("/login_admin", loginAdmin)
 	http.HandleFunc("/home_admin", home_admin)
 	http.HandleFunc("/edit_profile", editProfile)
 	http.HandleFunc("/save_profile", saveProfile)
 }
+
+// func QueryAdmin(username string) user {
+// 	var admin = user{}
+// 	err = db.QueryRow(`
+// 		SELECT id, 
+// 		username, 
+// 		password,
+// 		role,
+// 		status
+// 		FROM admins WHERE username=?
+// 		`, username).
+// 		Scan(
+// 			&admin.ID,
+// 			&admin.Username,
+// 			&admin.Password,
+// 			&admin.Role,
+// 			&admin.Status,
+// 		)
+// 	return admin
+// }
+
 
 func QueryUser(username string) user {
 	var users = user{}
@@ -136,6 +158,39 @@ func register(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// func loginAdmin(w http.ResponseWriter, r *http.Request) {
+// 	session := sessions.Start(w, r)
+// 	if len(session.GetString("username")) != 0 {
+// 		http.Redirect(w, r, "/", http.StatusFound)
+// 		return
+// 	}
+
+// 	if r.Method != "POST" {
+// 		http.ServeFile(w, r, "login_admin.html")
+// 		return
+// 	}
+
+// 	username := r.FormValue("username")
+// 	password := r.FormValue("password")
+
+// 	admin := QueryAdmin(username)
+
+// 	var password_tes = bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(password))
+
+// 	if password_tes == nil {
+// 		session := sessions.Start(w, r)
+// 		session.Set("username", admin.Username)
+// 		session.Set("password", admin.Password)
+// 		http.Redirect(w, r, "/home_admin", http.StatusFound)
+// 		fmt.Println("Admin login success")
+// 	} else {
+// 		fmt.Println("Admin login failed")
+// 		fmt.Fprint(w, "Admin login failed")
+// 		http.Redirect(w, r, "/login_admin", http.StatusFound)
+// 	}
+// }
+
+
 func login(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) != 0 && checkErr(w, r, err) {
@@ -190,7 +245,7 @@ func home_user(w http.ResponseWriter, r *http.Request) {
 func home_admin(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
 	if len(session.GetString("username")) == 0 {
-		http.Redirect(w, r, "/home_admin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/login_admin", http.StatusMovedPermanently)
 	}
 
 	var data = map[string]string{
