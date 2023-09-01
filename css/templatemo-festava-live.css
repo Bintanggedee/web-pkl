@@ -498,8 +498,8 @@ strong {
   ABOUT              
 -----------------------------------------*/
 .about-section {
-  background-image: url("../images/uhamka-black-1.jpg");
-  background-color: #102a70;
+  /* background-image: url("../images/uhamka-black-1.jpg"); */
+  background-color: #1b2f5c;
   background-repeat: no-repeat;
   background-size: 2031px 1359px;
   position: relative;
@@ -542,7 +542,7 @@ strong {
   TICKET               
 -----------------------------------------*/
 .ticket-section {
-  background-image: url("../images/nicholas-green-unsplash-blur.jpg");
+  background-image: url("../images/uhamka-black-2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
@@ -633,7 +633,7 @@ strong {
   SCHEDULE              
 -----------------------------------------*/
 .schedule-section {
-  background-image: url("../images/nainoa-shizuru-unsplash-blur.jpg");
+  background-image: url("../images/uhamka-black-3.jpg");
   background-color: #242424;
   background-repeat: no-repeat;
   background-position: center;
@@ -764,7 +764,7 @@ strong {
 
 .site-footer-top {
   background-color: var(--secondary-color);
-  background-image: url("../images/nainoa-shizuru-NcdG9mK3PBY-unsplash.jpg");
+  /* background-image: url("../images/uhamka-black-3.jpg"); */
   background-repeat: no-repeat;
   margin-bottom: 70px;
   padding-top: 30px;

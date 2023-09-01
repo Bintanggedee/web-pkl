@@ -22,14 +22,6 @@
     <link href="css/bootstrap-icons.css" rel="stylesheet">
 
     <link href="css/templatemo-festava-live.css" rel="stylesheet">
-    <!--
-
-TemplateMo 583 Festava Live
-
-https://templatemo.com/tm-583-festava-live
-
--->
-
 </head>
 <body>
     <main>
@@ -42,7 +34,6 @@ https://templatemo.com/tm-583-festava-live
                             <strong class="text-dark">Selamat Datang</strong>
                         </p>
                     </div>
-
                 </div>
             </div>
         </header>
@@ -88,23 +79,28 @@ https://templatemo.com/tm-583-festava-live
                     <div class="col-lg-6 col-10 mx-auto">
                         <form class="custom-form ticket-form mb-5 mb-lg-0" action="/save_profile" method="post" role="form">
                             <h2 class="text-center mb-4">Ubah Profil</h2>
-                            <div class="ticket-form-body">  
+                            <div class="ticket-form-body">
+                                <font color="#F0F0F0"><label for="nim">NIM</label>
                                 <input type="text" class="form-control" name="nim" value="{{.nim}}" required>
                                     <!-- placeholder="Ph 085-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required=""> -->
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="text" name="username" value="{{.username}}" id="username"
+                                        <label for="username">Username</label>
+                                        <input type="text" name="new_username" placeholder="New Username" value="{{.username}}" id="username"
                                             class="form-control" required>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-12">
-                                        <input type="password" name="password" value="{{.password}}" id="password" class="form-control"
+                                        <label for="password">Password</label>
+                                        <input type="password" name="new_password" placeholder="New Password" value="{{.password}}" id="password" class="form-control"
                                             required>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-12">
+                                        <label for="nama">Nama</label>
                                         <input type="text" name="nama" value="{{.nama}}" id="nama" class="form-control"
                                             required>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-12">
+                                        <label for="asal_instansi">Asal Instansi</label>
                                         <input type="text" name="asal_instansi" value="{{.asal_instansi}}" id="asal_instansi" class="form-control" 
                                             required>
                                     </div>
@@ -128,18 +124,20 @@ https://templatemo.com/tm-583-festava-live
                                             <input type="text" name="selesai_pkl" value="{{.selesai_pkl.Format "2006-01-02"}}" id="selesai_pkl" class="form-control"
                                                 required></font>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="col-lg-6 col-md-6 col-12 d-none">
+                                        <label for="role">Role</label>
                                         <input type="text" name="role" value="{{.role}}" id="role"
                                             class="form-control" required>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-12">
+                                        <label for="status">Status</label>
                                         <input type="text" name="status" value="{{.status}}" id="status" class="form-control"
                                             required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-10 col-8 mx-auto">
                                     <button type="submit" value="Save" class="form-control">Simpan</button>
-                            </div>
+                            </div>  
                             <br>
                             <a href="/profile">Kembali ke Profile</a>
                         </form>
