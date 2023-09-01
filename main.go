@@ -17,10 +17,11 @@ import (
 var db *sql.DB
 var err error
 
-type admins struct {
+type admin struct {
+	Nim          string
 	Username     string
 	Password     string
-	Nim          string
+	Role 		 int
 }
 
 type user struct {
@@ -53,31 +54,36 @@ func connect_db() {
 func routes() {
 	http.HandleFunc("/register", register)
 	http.HandleFunc("/login", login)
-	http.HandleFunc("/home", home)
-	http.HandleFunc("/home_user", home_user)
 	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/home", home)
+	//user
+	http.HandleFunc("/home_user", home_user)
 	http.HandleFunc("/profile", profile)
-	//http.HandleFunc("/login_admin", loginAdmin)
-	http.HandleFunc("/home_admin", home_admin)
 	http.HandleFunc("/edit_profile", editProfile)
 	http.HandleFunc("/save_profile", saveProfile)
+	// admin
+	http.HandleFunc("/home_admin", home_admin)
+	http.HandleFunc("/profile_admin", profileAdmin)
+	http.HandleFunc("/edit_profileAdmin", editProfileAdmin)
+	http.HandleFunc("/save_profileAdmin", saveProfileAdmin)
 }
 
-func QueryAdmin(username string) admins {
-	var admin = admins{}
+func QueryAdmin(username string) admin {
+	var admins = admin{}
 	err = db.QueryRow(`
-		SELECT nim, 
-		username, 
-		password,
-		FROM admin WHERE username=?
+		SELECT nim,
+		username,
+		password,		
+		role
+		FROM admins WHERE username=?
 		`, username).
 		Scan(
-			&admin.Username,
-			&admin.Password,
-			&admin.Nim,
-
+			&admins.Nim,
+			&admins.Username,
+			&admins.Password,
+			&admins.Role,
 		)
-	return admin
+	return admins
 }
 
 func QueryUser(username string) user {
@@ -177,7 +183,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(password)
 
 	users := QueryUser(username)
-	admin := QueryAdmin(username)
+	admins := QueryAdmin(username)
 
 	var passwordMatch bool
 	var role int
@@ -185,8 +191,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	if (user{}) != users {
 		passwordMatch = (bcrypt.CompareHashAndPassword([]byte(users.Password), []byte(password)) == nil)
 		role = users.Role
-	} else if (admins{}) != admin {
-		passwordMatch = (bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(password)) == nil)
+	} else if (admin{}) != admins {
+		passwordMatch = (bcrypt.CompareHashAndPassword([]byte(admins.Password), []byte(password)) == nil)
 		role = 1 // Assuming 1 represents admin role
 	}
 
@@ -263,6 +269,161 @@ func GetUserByUsername(username string) (user, error) {
 	return u, nil
 }
 
+func GetAdminByUsername(username string) (user, error) {
+	var u user
+	err := db.QueryRow("SELECT * FROM admins WHERE username = ?", username).
+		Scan(&u.ID, &u.Username, &u.Password, &u.Nim, &u.Role)
+	if err != nil {
+		return u, err
+	}
+	return u, nil
+}
+
+func profileAdmin(w http.ResponseWriter, r *http.Request) {
+	session := sessions.Start(w, r)
+	username := session.GetString("username")
+
+	if len(username) == 0 {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+
+	u, err := GetUserByUsername(username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var data = map[string]interface{}{
+		"username":     u.Username,
+		"password":     u.Password,
+		"nim":          u.Nim,
+		"role":         u.Role,
+	}
+
+	var t *template.Template
+	t, err = template.ParseFiles("profile_admin.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	t.Execute(w, data)
+}
+
+func editProfileAdmin(w http.ResponseWriter, r *http.Request) {
+	session := sessions.Start(w, r)
+	username := session.GetString("username")
+
+	if len(username) == 0 {
+		http.Redirect(w, r, "/profile_admin", http.StatusFound)
+		return
+	}
+
+	u, err := GetUserByUsername(username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		newUsername := r.FormValue("new_username")
+		newPassword := r.FormValue("new_password")
+
+		if newUsername != "" {
+			_, err := db.Exec("UPDATE admins SET username = ? WHERE username = ?", newUsername, username)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			username = newUsername
+			session.Set("username", newUsername)
+		}
+
+		if newPassword != "" {
+			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			_, err = db.Exec("UPDATE admins SET password = ? WHERE username = ?", hashedPassword, username)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	}
+
+	var data = map[string]interface{}{
+		"username":     u.Username,
+		// "password":     u.Password,
+		"nim":          u.Nim,
+		"role":         u.Role,
+	}
+
+	var t *template.Template
+	t, err = template.ParseFiles("edit_profileAdmin.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(w, data)
+}
+
+func saveProfileAdmin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Redirect(w, r, "/edit_profileAdmin", http.StatusFound)
+		return
+	}
+
+	session := sessions.Start(w, r)
+	username := session.GetString("username")
+
+	if len(username) == 0 {
+		http.Redirect(w, r, "/home_admin", http.StatusFound)
+		return
+	}
+	
+	Nim := r.FormValue("nim")
+	Role := r.FormValue("role")
+	newUsername := r.FormValue("new_username")
+	newPassword := r.FormValue("new_password")
+
+	if newUsername != "" || newPassword != "" {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		_, err = db.Exec(`
+			UPDATE admins
+			SET username=?, password=?, nim=?, role=?
+		`,
+			newUsername,
+			hashedPassword,
+			Nim,
+			Role,
+			username,
+		)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	session.Clear()
+		sessions.Destroy(w, r)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+// affectedRows, _ := result.RowsAffected()
+// if affectedRows == 0 {
+// 	http.Error(w, "Tidak ada perubahan", http.StatusInternalServerError)
+// 	return
+// }
+	http.Redirect(w, r, "/profile_admin", http.StatusSeeOther)
+}
 
 func profile(w http.ResponseWriter, r *http.Request) {
 	session := sessions.Start(w, r)
@@ -469,6 +630,6 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Server running on port :2005")
-	http.ListenAndServe(":2005", nil)
+	fmt.Println("Server running on port :2006")
+	http.ListenAndServe(":2006", nil)
 }
